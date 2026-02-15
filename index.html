@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Facio - Realtime Social App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    input, textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .green { background: #28a745; color: white; }
+    .blue { background: #007bff; color: white; }
+    .red { background: #dc3545; color: white; }
+
+    .post {
+      background: rgba(255,255,255,0.08);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Facio</h1>
+
+<div class="box">
+  <h2>Login / Signup</h2>
+  <input type="email" id="email" placeholder="Email" /><br/>
+  <input type="password" id="password" placeholder="Password" /><br/>
+  <button class="green" onclick="signup()">Signup</button>
+  <button class="blue" onclick="login()">Login</button>
+  <button class="red" onclick="logout()">Logout</button>
+  <p id="status"></p>
+</div>
+
+<div class="box">
+  <h2>New Post</h2>
+  <textarea id="postText" placeholder="What's on your mind?"></textarea><br/>
+  <button class="green" onclick="addPost()">Post</button>
+</div>
+
+<div class="box">
+  <h2>Feed</h2>
+  <div id="posts"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCOH_SJlGDu1QVBihXGadWzJWbFAZ6rrx0",
+    authDomain: "facioapp-9026d.firebaseapp.com",
+    projectId: "facioapp-9026d",
+    storageBucket: "facioapp-9026d.firebasestorage.app",
+    messagingSenderId: "482547744945",
+    appId: "1:482547744945:web:5452fbd81fb29e6ecba290",
+    measurementId: "G-0QNB1SW7SY"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.signup = async function() {
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+    await createUserWithEmailAndPassword(auth, email, pass);
+    document.getElementById("status").innerText = "Signup success ✅";
+  }
+
+  window.login = async function() {
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+    await signInWithEmailAndPassword(auth, email, pass);
+    document.getElementById("status").innerText = "Login success ✅";
+  }
+
+  window.logout = async function() {
+    await signOut(auth);
+    document.getElementById("status").innerText = "Logged out";
+  }
+
+  window.addPost = async function() {
+    const text = document.getElementById("postText").value;
+    await addDoc(collection(db, "posts"), {
+      text: text,
+      created: Date.now()
+    });
+    document.getElementById("postText").value = "";
+  }
+
+  const q = query(collection(db, "posts"), orderBy("created", "desc"));
+  onSnapshot(q, (snapshot) => {
+    const postsDiv = document.getElementById("posts");
+    postsDiv.innerHTML = "";
+    snapshot.forEach((doc) => {
+      postsDiv.innerHTML += `<div class="post">${doc.data().text}</div>`;
+    });
+  });
+
+</script>
+
+</body>
+</html>
