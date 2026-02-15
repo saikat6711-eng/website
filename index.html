@@ -1,473 +1,109 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Facio</title>
-
-  <style>
-    :root{
-      --bg1:#0f2027;
-      --bg2:#203a43;
-      --bg3:#2c5364;
-      --card:rgba(255,255,255,.06);
-      --card2:rgba(255,255,255,.08);
-      --text:#eaf2ff;
-      --muted:rgba(234,242,255,.75);
-      --border:rgba(255,255,255,.12);
-      --green:#23c55e;
-      --blue:#3b82f6;
-      --red:#ef4444;
-      --shadow:0 18px 45px rgba(0,0,0,.35);
-      --radius:18px;
-      --radius2:14px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      color:var(--text);
-      background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
-      padding:18px;
-      display:flex;
-      justify-content:center;
-    }
-    .wrap{width:min(980px,100%)}
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:14px 16px;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-    .logo{
-      width:44px;height:44px;border-radius:14px;
-      background:linear-gradient(145deg,#7c3aed,#06b6d4);
-      box-shadow:0 8px 18px rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.18);
-      flex:none;
-    }
-    .brand h1{margin:0;font-size:20px;letter-spacing:.3px}
-    .brand p{margin:2px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .right{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    .chip{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(0,0,0,.18);
-      color:var(--muted);
-      font-size:12px;
-      max-width:520px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .btn{
-      border:0;
-      border-radius:12px;
-      padding:10px 14px;
-      color:white;
-      cursor:pointer;
-      font-weight:650;
-      letter-spacing:.2px;
-      box-shadow:0 10px 22px rgba(0,0,0,.25);
-      transition:transform .06s ease;
-      user-select:none;
-    }
-    .btn:active{transform:scale(.98)}
-    .btn.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
-    .btn.blue{background:linear-gradient(135deg,#2563eb,#3b82f6)}
-    .btn.red{background:linear-gradient(135deg,#dc2626,#ef4444)}
-    .grid{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-    }
-    @media (min-width:920px){
-      .grid{grid-template-columns: 1fr 1fr}
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
-      backdrop-filter: blur(10px);
-    }
-    .card h2{margin:0 0 8px;font-size:20px}
-    .card p{margin:6px 0;color:var(--muted);font-size:13px;line-height:1.45}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .field{
-      width:100%;
-      padding:12px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(0,0,0,.16);
-      color:var(--text);
-      outline:none;
-      font-size:14px;
-    }
-    .field::placeholder{color:rgba(234,242,255,.5)}
-    .divider{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
-    .feed{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:12px;
-    }
-    .post{
-      background:var(--card2);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:var(--radius2);
-      padding:12px 12px;
-    }
-    .post .meta{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      color:var(--muted);
-      font-size:12px;
-      margin-bottom:6px;
-    }
-    .post .text{font-size:14px;white-space:pre-wrap;word-break:break-word}
-    .msg{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:var(--muted);
-      font-size:13px;
-      display:none;
-    }
-    .msg.ok{border-color:rgba(34,197,94,.35); color:rgba(209,255,227,.95)}
-    .msg.err{border-color:rgba(239,68,68,.35); color:rgba(255,215,215,.95)}
-    .msg.warn{border-color:rgba(59,130,246,.35); color:rgba(214,231,255,.95)}
-    .hidden{display:none !important}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
-    textarea.field{resize:vertical}
-  </style>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-    import {
-      getAuth,
-      onAuthStateChanged,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      query,
-      orderBy,
-      onSnapshot,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCOH_SJlGDu1QVBihXGadWzJWbFAZ6rrx0",
-      authDomain: "facioapp-9026d.firebaseapp.com",
-      projectId: "facioapp-9026d",
-      storageBucket: "facioapp-9026d.firebasestorage.app",
-      messagingSenderId: "482547744945",
-      appId: "1:482547744945:web:5452fbd81fb29e6ecba290"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const $ = (id) => document.getElementById(id);
-
-    function showMsg(type, text){
-      const el = $("msg");
-      el.classList.remove("ok","err","warn");
-      el.classList.add(type);
-      el.textContent = text;
-      el.style.display = "block";
-    }
-    function clearMsg(){
-      const el = $("msg");
-      el.style.display = "none";
-      el.textContent = "";
-      el.classList.remove("ok","err","warn");
-    }
-
-    function safeNameFromEmail(email){
-      if(!email) return "User";
-      const left = email.split("@")[0] || "User";
-      return left.slice(0, 24);
-    }
-    function fmtTime(d){
-      if(!d) return "";
-      try{
-        return new Intl.DateTimeFormat(undefined, {
-          year:"numeric", month:"2-digit", day:"2-digit",
-          hour:"2-digit", minute:"2-digit"
-        }).format(d);
-      }catch{
-        return d.toString();
-      }
-    }
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    let unsubscribeFeed = null;
-
-    function startFeed(){
-      if (unsubscribeFeed) unsubscribeFeed();
-      const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-      unsubscribeFeed = onSnapshot(q, (snap) => {
-        const feed = $("feed");
-        feed.innerHTML = "";
-
-        if (snap.empty){
-          const empty = document.createElement("div");
-          empty.className = "post";
-          empty.innerHTML = `
-            <div class="meta"><span class="mono">No posts yet</span><span></span></div>
-            <div class="text">Be the first to post something.</div>
-          `;
-          feed.appendChild(empty);
-          return;
-        }
-
-        snap.forEach((doc) => {
-          const data = doc.data() || {};
-          const name = data.authorName || "User";
-          const text = data.text || "";
-          const createdAt = data.createdAt?.toDate ? data.createdAt.toDate() : null;
-
-          const item = document.createElement("div");
-          item.className = "post";
-          item.innerHTML = `
-            <div class="meta">
-              <span><b>${escapeHtml(name)}</b></span>
-              <span class="mono">${createdAt ? fmtTime(createdAt) : ""}</span>
-            </div>
-            <div class="text">${escapeHtml(text)}</div>
-          `;
-          feed.appendChild(item);
-        });
-      }, (err) => showMsg("err", "Feed error: " + (err?.message || err)));
-    }
-
-    function stopFeed(){
-      if (unsubscribeFeed) unsubscribeFeed();
-      unsubscribeFeed = null;
-      $("feed").innerHTML = "";
-    }
-
-    function setLoggedOutUI(){
-      $("loginCard").classList.remove("hidden");
-      $("appCard").classList.add("hidden");
-      $("who").textContent = "Not logged in";
-      $("logoutBtn").classList.add("hidden");
-      stopFeed();
-    }
-
-    function setLoggedInUI(user){
-      $("loginCard").classList.add("hidden");
-      $("appCard").classList.remove("hidden");
-      $("logoutBtn").classList.remove("hidden");
-
-      const email = user?.email || "";
-      $("who").textContent = "Logged in: " + email;
-
-      $("postText").value = "";
-      $("count").textContent = "0/300";
-      startFeed();
-    }
-
-    $("signupBtn").addEventListener("click", async () => {
-      clearMsg();
-      const email = $("email").value.trim();
-      const pass = $("pass").value;
-
-      if(!email || !pass) return showMsg("warn", "Email and Password required.");
-      if(pass.length < 6) return showMsg("warn", "Password must be at least 6 characters.");
-
-      $("signupBtn").disabled = true;
-      $("loginBtn").disabled = true;
-      try{
-        await createUserWithEmailAndPassword(auth, email, pass);
-        showMsg("ok", "Signup successful ✅");
-      }catch(e){
-        showMsg("err", e?.message || String(e));
-      }finally{
-        $("signupBtn").disabled = false;
-        $("loginBtn").disabled = false;
-      }
-    });
-
-    $("loginBtn").addEventListener("click", async () => {
-      clearMsg();
-      const email = $("email").value.trim();
-      const pass = $("pass").value;
-
-      if(!email || !pass) return showMsg("warn", "Email and Password required.");
-
-      $("signupBtn").disabled = true;
-      $("loginBtn").disabled = true;
-      try{
-        await signInWithEmailAndPassword(auth, email, pass);
-        showMsg("ok", "Login successful ✅");
-      }catch(e){
-        showMsg("err", e?.message || String(e));
-      }finally{
-        $("signupBtn").disabled = false;
-        $("loginBtn").disabled = false;
-      }
-    });
-
-    $("logoutBtn").addEventListener("click", async () => {
-      clearMsg();
-      $("logoutBtn").disabled = true;
-      try{
-        await signOut(auth);
-        showMsg("ok", "Logged out ✅");
-      }catch(e){
-        showMsg("err", e?.message || String(e));
-      }finally{
-        $("logoutBtn").disabled = false;
-      }
-    });
-
-    $("postText").addEventListener("input", () => {
-      const v = $("postText").value || "";
-      const n = Math.min(300, v.length);
-      $("count").textContent = `${n}/300`;
-      if(v.length > 300){
-        $("postText").value = v.slice(0, 300);
-      }
-    });
-
-    $("postBtn").addEventListener("click", async () => {
-      clearMsg();
-      const user = auth.currentUser;
-      if(!user) return showMsg("warn", "You must be logged in.");
-
-      const text = ($("postText").value || "").trim();
-      if(!text) return showMsg("warn", "Write something first.");
-      if(text.length > 300) return showMsg("warn", "Max 300 characters.");
-
-      $("postBtn").disabled = true;
-      try{
-        await addDoc(collection(db, "posts"), {
-          uid: user.uid,
-          authorName: safeNameFromEmail(user.email),
-          text,
-          createdAt: serverTimestamp()
-        });
-        $("postText").value = "";
-        $("count").textContent = "0/300";
-        showMsg("ok", "Posted ✅");
-      }catch(e){
-        showMsg("err", e?.message || String(e));
-      }finally{
-        $("postBtn").disabled = false;
-      }
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if(user) setLoggedInUI(user);
-      else setLoggedOutUI();
-    });
-  </script>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
-        <div style="min-width:0">
-          <h1>Facio</h1>
-          <p>Login first • Then see feed</p>
-        </div>
-      </div>
 
-      <div class="right">
-        <div id="who" class="chip mono">Not logged in</div>
-        <button id="logoutBtn" class="btn red hidden" type="button">Logout</button>
-      </div>
-    </div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <h1 class="logo">Facio</h1>
+      <p class="subtitle">Sign in to continue</p>
 
-    <div id="msg" class="msg"></div>
+      <input type="email" id="email" placeholder="Email" class="input">
+      <input type="password" id="password" placeholder="Password" class="input">
 
-    <div class="grid">
-      <div id="loginCard" class="card">
-        <h2>Login / Signup</h2>
-        <p>Email + Password দিয়ে account তৈরি/লগইন করো</p>
+      <button class="btn primary" id="loginBtn">Login</button>
+      <button class="btn secondary" id="signupBtn">Create Account</button>
 
-        <input id="email" class="field" type="email" placeholder="Email" autocomplete="email" />
-        <div style="height:10px"></div>
-        <input id="pass" class="field" type="password" placeholder="Password (min 6)" autocomplete="current-password" />
-
-        <div class="row" style="margin-top:12px">
-          <button id="signupBtn" class="btn green" type="button">Signup</button>
-          <button id="loginBtn" class="btn blue" type="button">Login</button>
-        </div>
-
-        <div class="divider"></div>
-        <p class="mono" style="margin:0">
-          Firebase Auth + Firestore Feed enabled.
-        </p>
-      </div>
-
-      <div id="appCard" class="card hidden">
-        <h2>Home Feed</h2>
-        <p>Login করলে এখানে পোস্ট দেখাবে + realtime update হবে</p>
-
-        <div class="card" style="padding:14px;background:rgba(0,0,0,.10);border-radius:var(--radius2);border:1px solid rgba(255,255,255,.12);box-shadow:none">
-          <h3 style="margin:0 0 8px;font-size:16px">New Post</h3>
-          <textarea id="postText" class="field" rows="4" placeholder="What's on your mind?"></textarea>
-          <div class="divider"></div>
-          <div class="row" style="justify-content:space-between;align-items:center">
-            <span class="mono" id="count">0/300</span>
-            <button id="postBtn" class="btn green" type="button">Post</button>
-          </div>
-        </div>
-
-        <div style="height:12px"></div>
-
-        <div>
-          <h3 style="margin:0 0 8px;font-size:16px">Feed</h3>
-          <div id="feed" class="feed"></div>
-        </div>
-      </div>
+      <p class="forgot">Forgot password?</p>
     </div>
   </div>
+
+  <script src="app.js"></script>
 </body>
-</html>
-```0
+</html>* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  text-align: center;
+  color: white;
+}
+
+.logo {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  margin-bottom: 20px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.secondary {
+  background: #22c55e;
+  color: white;
+}
+
+.forgot {
+  margin-top: 15px;
+  font-size: 13px;
+  opacity: 0.7;
+  cursor: pointer;
+}document.getElementById("loginBtn").addEventListener("click", function() {
+  alert("Login button clicked");
+});
+
+document.getElementById("signupBtn").addEventListener("click", function() {
+  alert("Signup button clicked");
+});
